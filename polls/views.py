@@ -9,6 +9,7 @@ from .models import Choice, Question
 
 # Create your views here.
 
+
 class IndexView(generic.ListView):
     template_name = "polls/index.html"
     context_object_name = "latest_question_list"
