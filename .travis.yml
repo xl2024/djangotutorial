@@ -15,25 +15,6 @@ script:
   - black --check .
   - flake8 .
   - coverage run --source=mysite,polls manage.py test
-  - coverage run debug_coveralls.py
-  - echo "--- CANARY SCRIPT STAGE IS RUNNING ---"
 
-after_script:
-  - echo "--- STARTING COVERALLS DIAGNOSTIC ---"
-  # --- STEP 1: VERIFY ENVIRONMENT VARIABLES ---
-  - echo "[STEP 1] Checking Travis CI environment variables..."
-  - echo "  - Travis Branch $TRAVIS_BRANCH"
-  - echo "  - Travis Commit $TRAVIS_COMMIT"
-  - echo "  - Travis Pull Request $TRAVIS_PULL_REQUEST"
-  
-  # --- STEP 3: VERIFY NETWORK CONNECTION ---
-  - echo "[STEP 3] Testing network connection to Coveralls API..."
-  - curl -v https://coveralls.io/api/v1/jobs
-  
-  # --- STEP 4: ATTEMPT UPLOAD ---
-  - echo "[STEP 4] Running the coveralls command with robust debug options..."
-  
-
-  - echo "--- END OF COVERALLS DIAGNOSTIC ---"
-
-  - coveralls debug
+after_success:
+  - coveralls
