@@ -30,5 +30,5 @@ after_success:
   - echo "[STEP 2] Running the coveralls command..."
   # The 'debug' command is the most reliable for CI environments.
   # It forces the tool to find and use the environment variables.
-  - coveralls debug --service=travis-ci
-  # - coveralls
+  # - coveralls debug --service=travis-ci
+  - coveralls
