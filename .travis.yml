@@ -17,13 +17,27 @@ script:
   - coverage run --source=mysite,polls manage.py test
 
 after_script:
-  - echo "--- Starting after_success stage ---"
-
-  # Step 1: List all files in the current directory.
-  # We need to see if the '.coverage' file exists.
-  - echo "Listing files in root directory:"
-  - ls -la
+  - echo "--- STARTING COVERALLS DIAGNOSTIC ---"
   
-  # Step 2: Run the coveralls command with verbose logging.
-  - echo "Attempting to submit coverage report..."
+  # --- STEP 1: VERIFY ENVIRONMENT VARIABLES ---
+  - echo "[STEP 1] Checking Travis CI environment variables..."
+  - echo "  - Travis Branch: $TRAVIS_BRANCH"
+  - echo "  - Travis Commit: $TRAVIS_COMMIT"
+  - echo "  - Travis Pull Request: $TRAVIS_PULL_REQUEST"
+  - if [ -z "$COVERALLS_REPO_TOKEN" ]; then echo "  - ERROR: COVERALLS_REPO_TOKEN is not set!"; else echo "  - OK: COVERALLS_REPO_TOKEN is set."; fi
+  
+  # --- STEP 2: VERIFY COVERAGE FILE ---
+  - echo "[STEP 2] Checking for the .coverage file..."
+  - ls -la
+  - if [ ! -f ".coverage" ]; then echo "  - ERROR: .coverage file NOT FOUND!"; else echo "  - OK: .coverage file found."; fi
+  
+  # --- STEP 3: VERIFY NETWORK CONNECTION ---
+  - echo "[STEP 3] Testing network connection to Coveralls API..."
+  - curl -v https://coveralls.io/api/v1/jobs
+  
+  # --- STEP 4: ATTEMPT UPLOAD ---
+  - echo "[STEP 4] Running the coveralls command with robust debug options..."
+  - coveralls debug --service=travis-ci
+  
+  - echo "--- END OF COVERALLS DIAGNOSTIC ---"
   - coveralls debug --service=travis-ci
