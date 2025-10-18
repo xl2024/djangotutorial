@@ -23,15 +23,15 @@ after_script:
   - echo "  - Travis Branch $TRAVIS_BRANCH"
   - echo "  - Travis Commit $TRAVIS_COMMIT"
   - echo "  - Travis Pull Request $TRAVIS_PULL_REQUEST"
-  - if [ -z "$COVERALLS_REPO_TOKEN" ]; then echo "  - ERROR COVERALLS_REPO_TOKEN is not set!"; 
-    else echo "  - OK: COVERALLS_REPO_TOKEN is set."; 
+  - if [ -z "$COVERALLS_REPO_TOKEN" ]; then echo "  - ERROR COVERALLS_REPO_TOKEN is not set!"
+    else echo "  - OK: COVERALLS_REPO_TOKEN is set."
     fi
   
   # --- STEP 2: VERIFY COVERAGE FILE ---
   - echo "[STEP 2] Checking for the .coverage file..."
   - ls -la
   - if [ ! -f ".coverage" ]; then echo "ERROR .coverage file NOT FOUND!"; 
-    else echo "  - OK: .coverage file found."; 
+    else echo "  - OK .coverage file found."; 
     fi
   
   # --- STEP 3: VERIFY NETWORK CONNECTION ---
@@ -40,7 +40,6 @@ after_script:
   
   # --- STEP 4: ATTEMPT UPLOAD ---
   - echo "[STEP 4] Running the coveralls command with robust debug options..."
-  - coveralls debug --service=travis-ci
   
   - echo "--- END OF COVERALLS DIAGNOSTIC ---"
   - coveralls debug --service=travis-ci
