@@ -15,6 +15,7 @@ script:
   - black --check .
   - flake8 .
   - coverage run --source=mysite,polls manage.py test
+  - coverage run debug_coveralls.py
   - echo "--- CANARY SCRIPT STAGE IS RUNNING ---"
 
 after_script:
@@ -32,7 +33,7 @@ after_script:
   # --- STEP 4: ATTEMPT UPLOAD ---
   - echo "[STEP 4] Running the coveralls command with robust debug options..."
   
-  
+
   - echo "--- END OF COVERALLS DIAGNOSTIC ---"
 
   - coveralls debug
