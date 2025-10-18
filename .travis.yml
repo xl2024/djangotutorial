@@ -4,11 +4,6 @@ dist: jammy  # Use Ubuntu 22.04
 python:
   - "3.12"
 
-before_script:
-  - echo "--- Checking Environment Variables ---"
-  - env | sort # 'sort' makes the output alphabetical and easier to read
-  - echo "------------------------------------"
-
 install:
   - pip install -r requirements.txt
 
