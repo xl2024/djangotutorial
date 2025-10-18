@@ -15,6 +15,7 @@ script:
   - black --check .
   - flake8 .
   - coverage run --source=mysite,polls manage.py test
+  - echo "--- CANARY SCRIPT STAGE IS RUNNING ---"
 
 after_script:
   - echo "--- STARTING COVERALLS DIAGNOSTIC ---"
