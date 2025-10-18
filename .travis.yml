@@ -15,7 +15,7 @@ script:
   - black --check .
   - flake8 .
   - coverage run --source=mysite,polls manage.py test
-  - coverage run send_coverage.py
+  # - coverage run send_coverage.py
 
 after_scripts:
   - coveralls
