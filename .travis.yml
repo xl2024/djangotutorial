@@ -17,5 +17,5 @@ script:
   - coverage run --source=mysite,polls manage.py test
 
 after_success:
-  - echo "Travis Branch: $TRAVIS_BRANCH"
+  - echo "Travis Branch $TRAVIS_BRANCH"
   - coveralls
