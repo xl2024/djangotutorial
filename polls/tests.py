@@ -4,4 +4,4 @@ from django.test import TestCase
 
 
 def test_return_True():
-    assert True, "test"
+    assert True, "dummy test"
