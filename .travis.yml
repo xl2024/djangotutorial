@@ -4,9 +4,15 @@ dist: jammy  # Use Ubuntu 22.04
 python:
   - "3.13"
 
+before_install:
+  # Download the latest version of the coverage-reporter binary
+  - curl -L https://github.com/coverallsapp/coverage-reporter/releases/latest/download/coveralls-linux.tar.gz -o coveralls.tar.gz
+  # Extract the binary
+  - tar -xzf coveralls.tar.gz
+
 install:
   - pip install -r requirements.txt
-  - pip install python-coveralls "coverage<5"
+  - curl -L https://coveralls.io/coveralls-linux.tar.gz | tar -xz -C /usr/local/bin
 
 before_script:
   - python manage.py migrate
@@ -16,7 +22,9 @@ script:
   - black --check .
   - flake8 .
   - coverage run --source=mysite,polls manage.py test
-  # - coverage run send_coverage.py
+  # Convert the coverage data to the lcov format for the universal reporter
+  - coverage lcov -o coverage.lcov
 
 after_scripts:
-  - coveralls
+  # Run the reporter. It automatically finds the coverage.lcov file and the repo token.
+  - ./coveralls
