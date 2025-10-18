@@ -33,4 +33,5 @@ after_script:
   - echo "[STEP 4] Running the coveralls command with robust debug options..."
   
   - echo "--- END OF COVERALLS DIAGNOSTIC ---"
+  
   - coveralls debug --service=travis-ci
