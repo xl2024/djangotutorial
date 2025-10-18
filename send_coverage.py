@@ -1,47 +1,30 @@
 import os
 import sys
-import subprocess
 from coveralls import Coveralls
 from coveralls.api import CoverallsException
 
-print("--- Starting Manual Coverage Submission Script ---")
+print("--- Starting Coverage Submission Script ---")
 
-# --- Step 1: Manually Collect Git Information ---
-print("[STEP 1] Collecting Git and CI environment data...")
-git_info = {
-    "branch": os.environ.get("TRAVIS_BRANCH"),
-    "commit_sha": os.environ.get("TRAVIS_COMMIT"),
-    "service_name": "travis-ci",
-    "service_job_id": os.environ.get("TRAVIS_JOB_ID"),
-    "repo_token": os.environ.get("COVERALLS_REPO_TOKEN"),
-}
-
-# --- Step 2: Validate the Collected Data ---
-print("[STEP 2] Validating collected data...")
-is_valid = True
-for key, value in git_info.items():
-    if not value:
-        print(
-            f"  - ERROR: Required environment variable '{key.upper()}' is missing or empty."
-        )
-        is_valid = False
-    else:
-        # Don't print the token itself for security
-        if key != "repo_token":
-            print(f"  - OK: {key} = {value}")
-        else:
-            print("  - OK: repo_token is set.")
-
-if not is_valid:
-    print("\nERROR: Could not gather all required CI data. Aborting.")
+# --- Step 1: Get the repo token ---
+print("[STEP 1] Getting repository token...")
+repo_token = os.environ.get("COVERALLS_REPO_TOKEN")
+if not repo_token:
+    print("ERROR: COVERALLS_REPO_TOKEN environment variable not found.")
     sys.exit(1)
+else:
+    print("OK: Found COVERALLS_REPO_TOKEN.")
 
-# --- Step 3: Submit the Report ---
-print("[STEP 3] Initializing Coveralls client and submitting report...")
+# --- Step 2: Submit the Report ---
+print("[STEP 2] Initializing Coveralls client and submitting report...")
 try:
-    # Initialize the client and pass the git info directly
-    coveralls_client = Coveralls(repo_token=git_info["repo_token"])
-    result = coveralls_client.submit(git_info)
+    # Initialize the client, explicitly telling it the service name.
+    # It will automatically find all the necessary git info (branch, commit, etc.)
+    # from the Travis CI environment variables.
+    coveralls_client = Coveralls(service_name="travis-ci", repo_token=repo_token)
+
+    # The wear() method is the correct function to find coverage,
+    # gather git info, and submit the report to the Coveralls API.
+    result = coveralls_client.wear()
 
     print("\n--- S U C C E S S ---")
     print("The report was successfully submitted to Coveralls.")
