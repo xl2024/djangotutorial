@@ -3,5 +3,6 @@ from django.test import TestCase
 # Create your tests here.
 
 
-def test_return_True():
-    assert True, "dummy test"
+class DummySuccessTest(TestCase):
+    def test_always_succeeds(self):
+        self.assertTrue(True, "This should always pass!")
