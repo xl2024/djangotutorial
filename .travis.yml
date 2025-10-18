@@ -1,8 +1,9 @@
 language: python
-dist: jammy  # Use Ubuntu 22.04
 
 python:
   - "3.12"
+
+os: windows
 
 install:
   - pip install -r requirements.txt
