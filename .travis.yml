@@ -32,6 +32,7 @@ after_script:
   # --- STEP 4: ATTEMPT UPLOAD ---
   - echo "[STEP 4] Running the coveralls command with robust debug options..."
   
+  
   - echo "--- END OF COVERALLS DIAGNOSTIC ---"
 
   - coveralls debug
