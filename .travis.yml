@@ -17,4 +17,13 @@ script:
   - coverage run --source=mysite,polls manage.py test
 
 after_script:
+  - echo "--- Starting after_success stage ---"
+
+  # Step 1: List all files in the current directory.
+  # We need to see if the '.coverage' file exists.
+  - echo "Listing files in root directory:"
+  - ls -la
+  
+  # Step 2: Run the coveralls command with verbose logging.
+  - echo "Attempting to submit coverage report..."
   - coveralls debug --service=travis-ci
