@@ -18,7 +18,6 @@ script:
 
 after_script:
   - echo "--- STARTING COVERALLS DIAGNOSTIC ---"
-  
   # --- STEP 1: VERIFY ENVIRONMENT VARIABLES ---
   - echo "[STEP 1] Checking Travis CI environment variables..."
   - echo "  - Travis Branch: $TRAVIS_BRANCH"
