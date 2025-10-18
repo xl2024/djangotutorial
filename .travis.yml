@@ -1,4 +1,5 @@
 language: python
+dist: jammy  # Use Ubuntu 22.04
 
 python:
   - "3.12"
@@ -17,4 +18,3 @@ script:
 
 after_script:
   - coveralls
-  
