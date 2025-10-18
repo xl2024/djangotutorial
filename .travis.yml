@@ -17,6 +17,18 @@ script:
   - coverage run --source=mysite,polls manage.py test
 
 after_success:
-  - echo "Travis Branch $TRAVIS_BRANCH"
-  - coveralls
+  - echo "--- STARTING FINAL DIAGNOSTIC ---"
   
+  # --- STEP 1: VERIFY GIT ENVIRONMENT VARIABLES ---
+  - echo "[STEP 1] Checking Travis CI Git context..."
+  - echo "  - Travis Branch $TRAVIS_BRANCH"
+  - echo "  - Travis Commit $TRAVIS_COMMIT"
+  - echo "  - Travis Repo Slug $TRAVIS_REPO_SLUG"
+  - echo "  - Travis Pull Request $TRAVIS_PULL_REQUEST"
+  
+  # --- STEP 2: ATTEMPT UPLOAD WITH ROBUST COMMAND ---
+  - echo "[STEP 2] Running the coveralls command..."
+  # The 'debug' command is the most reliable for CI environments.
+  # It forces the tool to find and use the environment variables.
+  - coveralls debug --service=travis-ci
+  # - coveralls
