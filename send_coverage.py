@@ -8,51 +8,51 @@ print("--- Starting Manual Coverage Submission Script ---")
 # --- Step 1: Manually collect all required CI and Git data ---
 print("[STEP 1] Collecting data from Travis CI environment variables...")
 
-# The service_name and repo_token are passed to the constructor.
-service_name = "travis-ci"
+# The repo_token is passed to the constructor.
 repo_token = os.environ.get("COVERALLS_REPO_TOKEN")
 
-# The Git metadata is passed later to the wear() method.
-git_info = {
-    "branch": os.environ.get(
-        "TRAVIS_BRANCH", "master"
-    ),  # Default to master if not found
-    "commit_sha": os.environ.get("TRAVIS_COMMIT"),
+# All other service and Git metadata is also passed to the constructor.
+service_info = {
+    "service_name": "travis-ci",
     "service_job_id": os.environ.get("TRAVIS_JOB_ID"),
-    "service_pull_request": os.environ.get("TRAVIS_PULL_REQUEST", "false"),
+    "git": {
+        "branch": os.environ.get(
+            "TRAVIS_BRANCH", "master"
+        ),  # Default to master if not found
+        "head": {
+            "id": os.environ.get("TRAVIS_COMMIT"),
+            "author_name": os.environ.get("GIT_AUTHOR_NAME"),
+            "committer_name": os.environ.get("GIT_COMMITTER_NAME"),
+            "author_email": os.environ.get("GIT_AUTHOR_EMAIL"),
+            "committer_email": os.environ.get("GIT_COMMITTER_EMAIL"),
+            "message": "Build from Travis CI",
+        },
+    },
 }
 
 # --- Step 2: Validate the collected data ---
 print("[STEP 2] Validating collected data...")
-is_valid = True
-# Check the required token first
 if not repo_token:
-    print("  - ERROR: Required environment variable 'COVERALLS_REPO_TOKEN' is missing.")
-    is_valid = False
+    print(
+        "  - ERROR: Required environment variable 'COVERALLS_REPO_TOKEN' is missing. Aborting."
+    )
+    sys.exit(1)
 else:
     print("  - OK: repo_token is set.")
 
-# Check the Git metadata
-for key, value in git_info.items():
-    if not value:
-        print(f"  - WARNING: Environment variable for '{key}' is missing or empty.")
-        # Some of these might be optional, so we'll just warn and not fail.
-    else:
-        print(f"  - OK: {key} = {value}")
-
-if not is_valid:
-    print("\nERROR: Cannot proceed without a repository token. Aborting.")
-    sys.exit(1)
+print(f"  - OK: branch = {service_info['git']['branch']}")
+print(f"  - OK: commit_sha = {service_info['git']['head']['id']}")
 
 # --- Step 3: Submit the Report ---
 print("[STEP 3] Initializing Coveralls client and submitting report...")
 try:
-    # Initialize the client with the service name and token.
-    coveralls_client = Coveralls(service_name=service_name, repo_token=repo_token)
+    # Initialize the client, passing the repo_token and all the service info.
+    # This manually overrides the faulty auto-detection.
+    coveralls_client = Coveralls(repo_token=repo_token, **service_info)
 
-    # The wear() method will find the .coverage file and use the git_info
-    # we provide to enrich the report before sending.
-    result = coveralls_client.wear(git_info=git_info)
+    # The wear() method will now use the manually provided git_info
+    # to enrich the report before sending.
+    result = coveralls_client.wear()
 
     print("\n--- S U C C E S S ---")
     print("The report was successfully submitted to Coveralls.")
