@@ -9,10 +9,13 @@ before_install:
   - curl -L https://github.com/coverallsapp/coverage-reporter/releases/latest/download/coveralls-linux.tar.gz -o coveralls.tar.gz
   # Extract the binary
   - tar -xzf coveralls.tar.gz
+  # Download the latest version of the coverage-reporter binary to the local directory
+  - curl -L https://github.com/coverallsapp/coverage-reporter/releases/latest/download/coveralls-linux.tar.gz -o coveralls.tar.gz
+  # Extract the binary to the local directory
+  - tar -xzf coveralls.tar.gz
 
 install:
   - pip install -r requirements.txt
-  - curl -L https://coveralls.io/coveralls-linux.tar.gz | tar -xz -C /usr/local/bin
 
 before_script:
   - python manage.py migrate
