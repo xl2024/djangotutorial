@@ -5,5 +5,4 @@ from django.test import TestCase
 
 class DummySuccessTest(TestCase):
     def test_always_succeeds(self):
-
         self.assertTrue(True, "This should always pass!")
