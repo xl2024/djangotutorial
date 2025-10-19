@@ -40,3 +40,4 @@ deploy:
   app: "djangotutorial"
   env: "djangotutorial-dev"
   bucket_name: "elasticbeanstalk-us-east-1-620079905652"
+  
