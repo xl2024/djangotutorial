@@ -27,3 +27,10 @@ script:
 after_scripts:
   # Run the reporter. It automatically finds the coverage.lcov file and the repo token.
   - ./coveralls
+
+deploy:
+  provider: elasticbeanstalk
+  region: "us-east-1"
+  app: "djangotutorial"
+  env: "djangotutorial-dev"
+  bucket_name: "elasticbeanstalk-us-east-1-620079905652"
